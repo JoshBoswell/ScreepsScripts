@@ -10,13 +10,12 @@
 *	- harvest
 *	- transfer
 */
-var teritoryManager = require("manager.teritory");
+var teritory = require("manager.teritory");
 
 module.exports = {
-	run: function()
-	{
-		for(var key in Game.spawns){
-			var room = Game.spawns[key].room;
+	run: function(){
+		for(var i = 0; i < teritory.hTer().length; i++){
+			var room = teritory.hTer()[i];
 			// Find room elements
 			var drones = room.find(FIND_MY_CREEPS, {filter: (creep) => {return creep.memory.role == "drone";} });
 			var spawns = room.find(FIND_STRUCTURES, {filter: (structure) => {return structure.structureType == STRUCTURE_SPAWN && structure.energy == structure.energyCapacity;} });
@@ -26,14 +25,12 @@ module.exports = {
 			var controller = room.controller;
 
 			// Create drones
-			if (drones.length < (Game.rooms.length * 6) && spawns.length > 0)
-			{
+			if (drones.length < (Game.rooms.length * 6) && spawns.length > 0){
 				var pattern = [MOVE, CARRY, WORK];
 				var patternCost = [50, 50, 100];
 				var cost = 0;
 				var modules = [];
-				while (cost < spawns[0].energyCapacity)
-				{
+				while (cost < spawns[0].energyCapacity){
 					var index = modules.length % pattern.length;
 					cost += patternCost[index];
 					if(cost < spawns[0].energyCapacity){
@@ -45,48 +42,42 @@ module.exports = {
 
 			// Control drones
 			var counter = 0;
-			for (var key in drones)
-			{
+			for (var key in drones){
 				var drone = drones[key];
-				if (drone.memory.state == "harvest")
-				{
+				if (drone.memory.state == "harvest"){
 					var source = drone.pos.findClosestByPath(sources);
-					if (source)
-					{
+					if (source){
 						if (drone.harvest(source) == ERR_NOT_IN_RANGE)
 						drone.moveTo(source, {visualizePathStyle: {stroke: "#fff000"}});
 					}
-
-					if (drone.carry.energy >= drone.carryCapacity)
-					drone.memory.state = "transfer";
-				}
-				else if (drone.memory.state == "transfer")
-				{
-					if (controller.ticksToDowngrade < 5000)
-					{
-						if (drone.upgradeController(controller) == ERR_NOT_IN_RANGE)
-						drone.moveTo(controller, {visualizePathStyle: {stroke: "#9700ff"}});
+					if (drone.carry.energy >= drone.carryCapacity){
+						drone.memory.state = "transfer";
 					}
-					else
-					{
-						var structure = drone.pos.findClosestByPath(structures);
-						if (structure)
-						{
-							if (drone.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
-							drone.moveTo(structure, {visualizePathStyle: {stroke: "#0fff00"}});
+				}
+				else if (drone.memory.state == "transfer"){
+					if (controller.ticksToDowngrade < 5000){
+						if (drone.upgradeController(controller) == ERR_NOT_IN_RANGE){
+							drone.moveTo(controller, {visualizePathStyle: {stroke: "#9700ff"}});
 						}
-						else
-						{
-							var site = drone.pos.findClosestByPath(sites)
-							if (site)
-							{
-								if (drone.build(site) == ERR_NOT_IN_RANGE)
-								drone.moveTo(site, {visualizePathStyle: {stroke: "#008fff"}});
+					}
+					else{
+						var structure = drone.pos.findClosestByPath(structures);
+						if (structure){
+							if (drone.transfer(structure, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE){
+								drone.moveTo(structure, {visualizePathStyle: {stroke: "#0fff00"}});
 							}
-							else
-							{
-								if (drone.upgradeController(controller) == ERR_NOT_IN_RANGE)
-								drone.moveTo(controller, {visualizePathStyle: {stroke: "#9700ff"}});
+						}
+						else{
+							var site = drone.pos.findClosestByPath(sites)
+							if (site){
+								if (drone.build(site) == ERR_NOT_IN_RANGE){
+									drone.moveTo(site, {visualizePathStyle: {stroke: "#008fff"}});
+								}
+							}
+							else{
+								if (drone.upgradeController(controller) == ERR_NOT_IN_RANGE){
+									drone.moveTo(controller, {visualizePathStyle: {stroke: "#9700ff"}});
+								}
 							}
 						}
 					}
