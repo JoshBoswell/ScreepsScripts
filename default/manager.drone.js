@@ -14,8 +14,8 @@ var teritory = require("manager.teritory");
 
 module.exports = {
 	run: function(){
-		for(var i = 0; i < teritory.hTer().length; i++){
-			var room = teritory.hTer()[i];
+		for(var i = 0; i < teritory.homeTer().length; i++){
+			var room = teritory.homeTer()[i];
 			// Find room elements
 			var drones = room.find(FIND_MY_CREEPS, {filter: (creep) => {return creep.memory.role == "drone";} });
 			var spawns = room.find(FIND_STRUCTURES, {filter: (structure) => {return structure.structureType == STRUCTURE_SPAWN && structure.energy == structure.energyCapacity;} });
