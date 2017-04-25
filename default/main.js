@@ -10,10 +10,11 @@ module.exports.loop = function()
 			delete Memory.creeps[i];
 		}
 	}
-	
+
 	// Get room
 	var room = Game.spawns["Hive_Alpha"].room;
-	
+	var rooms = Game.rooms;
+
 	// Run managers
 	droneManager.run(room);
 }
