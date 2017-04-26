@@ -16,16 +16,4 @@ module.exports = {
     }
     return homeTeritory;
   }
-
-  warMap: function(){
-    return null;
-  }
-
-  nxtXpan: function(){
-    return null;
-  }
-
-  warMap: function(){
-    return null;
-  }
 };

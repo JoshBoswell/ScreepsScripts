@@ -25,7 +25,7 @@ module.exports = {
 			var controller = room.controller;
 
 			// Create drones
-			if (drones.length < (Game.rooms.length * 6) && spawns.length > 0){
+			if (drones.length < 5 && spawns.length > 0){
 				var pattern = [MOVE, CARRY, WORK];
 				var patternCost = [50, 50, 100];
 				var cost = 0;
